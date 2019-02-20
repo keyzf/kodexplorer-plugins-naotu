@@ -1,2 +1,2 @@
-# kodexplorer-naotu
-Naotu plugin for kodexplorer
+# kodexplorer-plugins
+kodexplorer plugins
