@@ -10,7 +10,7 @@ class naotuPlugin extends PluginBase{
     }
     public function echoJs($st,$act){
         if($this->isFileExtence($st,$act)){
-            $this->echoFile('static/app/main.js');
+            $this->echoFile('static/main.js');
         }
     }
 }
