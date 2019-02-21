@@ -77,15 +77,17 @@
 	angular.module('kityminderKod', ['kityminderEditor'])
 			.controller('MainController', function($scope) {
 				$scope.initEditor = function(editor, minder) {
+          var path = window.location.search.substring(6);
+          $.getJSON(path, function(json) {
+            minder.importJson(json)
+          })
+          .fail(function(d, textStatus, error) {
+              console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+          });
 					window.editor = editor;
 					window.minder = minder;
 				};
 			});
-  var path = window.location.search.substring(6);
-  $.getJSON(path, function(json) {
-    console.log(json);
-    window.editor.minder.importJson(json)
-  });
 </script>
 
 </html>
