@@ -84,7 +84,7 @@
 				$scope.initEditor = function(editor, minder) {
           window.appHost = $.urlParam('apphost');
           window.filePath = $.urlParam('path');
-          $.getJSON(window.filePath, function(json) {
+          $.getJSON($.urlParam('url'), function(json) {
             minder.importJson(json)
           })
           .fail(function(d, textStatus, error) {
