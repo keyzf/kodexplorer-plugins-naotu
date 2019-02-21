@@ -6,7 +6,7 @@ kodReady.push(function(){
         sort:"{{config.fileSort}}",
         icon:'{{pluginHost}}static/images/icon.png',
         callback:function(path,ext){
-            var url = '{{pluginHost}}static/index.html?path='+core.pathCommon(path);
+            var url = '{{pluginHost}}static/kityminder/dist/index.html?path='+core.path2url(path);
             if('window' == "{{config.openWith}}"){
                 window.open(url);
             }else{
