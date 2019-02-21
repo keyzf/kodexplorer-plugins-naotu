@@ -74,11 +74,17 @@
 
 
 <script>
+  $.urlParam = function (name) {
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)')
+                      .exec(window.location.search);
+    return (results !== null) ? results[1] || 0 : false;
+  }
 	angular.module('kityminderKod', ['kityminderEditor'])
 			.controller('MainController', function($scope) {
 				$scope.initEditor = function(editor, minder) {
-          var path = window.location.search.substring(6);
-          $.getJSON(path, function(json) {
+          window.appHost = $.urlParam('apphost');
+          window.filePath = $.urlParam('path');
+          $.getJSON(window.filePath, function(json) {
             minder.importJson(json)
           })
           .fail(function(d, textStatus, error) {
