@@ -9,7 +9,8 @@ kodReady.push(function(){
             // console.log(path);
             // console.log(core.pathThis(path));
             // console.log(core.path2url(path));
-            var url = '{{pluginHost}}static/kityminder/dist/index.html?url='+core.path2url(path)+'&apphost='+G.appHost+'&path='+urlEncode(path);
+            var timestamp = new Date().getTime();
+            var url = '{{pluginHost}}static/kityminder/dist/index.html?url='+core.path2url(path)+'&apphost='+G.appHost+'&path='+urlEncode(path)+"&timestamp="+timestamp;
             if('window' == "{{config.openWith}}"){
                 window.open(url);
             }else{

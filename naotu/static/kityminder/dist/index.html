@@ -74,26 +74,27 @@
 
 
 <script>
-  $.urlParam = function (name) {
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)')
-                      .exec(window.location.search);
-    return (results !== null) ? results[1] || 0 : false;
-  }
+        $.urlParam = function (name) {
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)')
+                              .exec(window.location.search);
+            return (results !== null) ? results[1] || 0 : false;
+        }
 	angular.module('kityminderKod', ['kityminderEditor'])
 			.controller('MainController', function($scope) {
 				$scope.initEditor = function(editor, minder) {
-          window.appHost = $.urlParam('apphost');
-          window.filePath = $.urlParam('path');
-          $.getJSON($.urlParam('url'), function(json) {
-            minder.importJson(json)
-          })
-          .fail(function(d, textStatus, error) {
-              console.error("getJSON failed, status: " + textStatus + ", error: "+error)
-          });
+            window.appHost = $.urlParam('apphost');
+            window.filePath = $.urlParam('path');
+            $.getJSON($.urlParam('url'), {_: new Date().getTime()}, function(json) {
+                minder.importJson(json)
+            })
+            .fail(function(d, textStatus, error) {
+                console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+            });
 					window.editor = editor;
 					window.minder = minder;
 				};
 			});
+
 </script>
 
 </html>
