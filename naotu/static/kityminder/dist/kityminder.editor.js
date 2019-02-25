@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kityminder-editor - v1.0.67 - 2019-02-22
+ * kityminder-editor - v1.0.67 - 2019-02-25
  * https://github.com/fex-team/kityminder-editor
  * GitHub: https://github.com/fex-team/kityminder-editor 
  * Copyright (c) 2019 ; Licensed 
@@ -2179,6 +2179,11 @@ angular.module('kityminderEditor').run(['$templateCache', function($templateCach
   );
 
 
+  $templateCache.put('ui/directive/saveasKm/saveasKm.html',
+    "<div class=\"btn-group-vertical\" dropdown is-open=\"isopen\"><button type=\"button\" class=\"btn btn-default saveaskm\" title=\"{{ 'saveaskm' | lang:'ui' }}\" ng-class=\"{'active': isopen}\" ng-click=\"saveasKm()\"></button> <button type=\"button\" class=\"btn btn-default saveaskm-caption dropdown-toggle\" ng-click=\"saveasKm()\" title=\"{{ 'saveaskm' | lang:'ui' }}\"><span class=\"caption\">{{ 'saveaskm' | lang:'ui' }}</span> <span class=\"sr-only\">{{ 'saveaskm' | lang:'ui' }}</span></button></div>"
+  );
+
+
   $templateCache.put('ui/directive/searchBox/searchBox.html',
     "<div id=\"search\" class=\"search-box clearfix\" ng-show=\"showSearch\"><div class=\"input-group input-group-sm search-input-wrap\"><input type=\"text\" id=\"search-input\" class=\"form-control search-input\" ng-model=\"keyword\" ng-keydown=\"handleKeyDown($event)\" aria-describedby=\"basic-addon2\"> <span class=\"input-group-addon search-addon\" id=\"basic-addon2\" ng-show=\"showTip\" ng-bind=\"'第 ' + curIndex + ' 条，共 ' + resultNum + ' 条'\"></span></div><div class=\"btn-group btn-group-sm prev-and-next-btn\" role=\"group\"><button type=\"button\" class=\"btn btn-default\" ng-click=\"doSearch(keyword, 'prev')\"><span class=\"glyphicon glyphicon-chevron-up\"></span></button> <button type=\"button\" class=\"btn btn-default\" ng-click=\"doSearch(keyword, 'next')\"><span class=\"glyphicon glyphicon-chevron-down\"></span></button></div><div class=\"close-search\" ng-click=\"exitSearch()\"><span class=\"glyphicon glyphicon-remove\"></span></div></div>"
   );
@@ -2210,7 +2215,7 @@ angular.module('kityminderEditor').run(['$templateCache', function($templateCach
 
 
   $templateCache.put('ui/directive/topTab/topTab.html',
-    "<tabset><tab heading=\"{{ 'idea' | lang: 'ui/tabs'; }}\" ng-click=\"toggleTopTab('idea')\" select=\"setCurTab('idea')\"><undo-redo editor=\"editor\"></undo-redo><append-node minder=\"minder\"></append-node><arrange minder=\"minder\"></arrange><operation minder=\"minder\"></operation><hyper-link minder=\"minder\"></hyper-link><image-btn minder=\"minder\"></image-btn><note-btn minder=\"minder\"></note-btn><priority-editor minder=\"minder\"></priority-editor><progress-editor minder=\"minder\"></progress-editor><resource-editor minder=\"minder\"></resource-editor></tab><tab heading=\"{{ 'appearence' | lang: 'ui/tabs'; }}\" ng-click=\"toggleTopTab('appearance')\" select=\"setCurTab('appearance')\"><template-list minder=\"minder\" class=\"inline-directive\"></template-list><theme-list minder=\"minder\"></theme-list><layout minder=\"minder\" class=\"inline-directive\"></layout><style-operator minder=\"minder\" class=\"inline-directive\"></style-operator><font-operator minder=\"minder\" class=\"inline-directive\"></font-operator></tab><tab heading=\"{{ 'view' | lang: 'ui/tabs'; }}\" ng-click=\"toggleTopTab('view')\" select=\"setCurTab('view')\"><expand-level minder=\"minder\"></expand-level><select-all minder=\"minder\"></select-all><search-btn minder=\"minder\"></search-btn></tab><tab heading=\"{{ 'save' | lang: 'ui/tabs'; }}\" ng-click=\"saveMindMap()\"></tab></tabset>"
+    "<tabset><tab heading=\"{{ 'idea' | lang: 'ui/tabs'; }}\" ng-click=\"toggleTopTab('idea')\" select=\"setCurTab('idea')\"><undo-redo editor=\"editor\"></undo-redo><append-node minder=\"minder\"></append-node><arrange minder=\"minder\"></arrange><operation minder=\"minder\"></operation><hyper-link minder=\"minder\"></hyper-link><image-btn minder=\"minder\"></image-btn><note-btn minder=\"minder\"></note-btn><priority-editor minder=\"minder\"></priority-editor><progress-editor minder=\"minder\"></progress-editor><resource-editor minder=\"minder\"></resource-editor></tab><tab heading=\"{{ 'appearence' | lang: 'ui/tabs'; }}\" ng-click=\"toggleTopTab('appearance')\" select=\"setCurTab('appearance')\"><template-list minder=\"minder\" class=\"inline-directive\"></template-list><theme-list minder=\"minder\"></theme-list><layout minder=\"minder\" class=\"inline-directive\"></layout><style-operator minder=\"minder\" class=\"inline-directive\"></style-operator><font-operator minder=\"minder\" class=\"inline-directive\"></font-operator></tab><tab heading=\"{{ 'view' | lang: 'ui/tabs'; }}\" ng-click=\"toggleTopTab('view')\" select=\"setCurTab('view')\"><expand-level minder=\"minder\"></expand-level><select-all minder=\"minder\"></select-all><search-btn minder=\"minder\"></search-btn></tab><tab heading=\"{{ 'saveas' | lang: 'ui/tabs'; }}\" ng-click=\"toggleTopTab('saveas')\" select=\"setCurTab('saveas')\"><saveas-km minder=\"minder\"></saveas-km></tab></tabset>"
   );
 
 
@@ -2508,7 +2513,7 @@ angular.module('kityminderEditor')
 						'idea': '思路',
 						'appearence': '外观',
 						'view': '视图',
-						'save': '保存'
+						'saveas': '保存为'
 					},
 
 					'quickvisit': {
@@ -2655,6 +2660,7 @@ angular.module('kityminderEditor')
 					'removeimage': '移除已有图片',
 					'removenote': '移除已有备注',
 					'resetlayout': '整理',
+					'saveaskm': 'km',
 
 					'justnow': '刚刚',
 					'minutesago': '{0} 分钟前',
@@ -4230,6 +4236,55 @@ angular.module('kityminderEditor')
         };
     }]);
 angular.module('kityminderEditor')
+	.directive('saveasKm', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'ui/directive/saveasKm/saveasKm.html',
+			scope: {
+				minder: '='
+			},
+      replace: true,
+			link: function(scope) {
+        scope.saveasKm = function() {
+          fetch(window.appHost+"editor/fileSave", {
+            "credentials": "include",
+            "headers": {
+              "accept": "application/json, text/javascript, */*; q=0.01",
+              "accept-language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,zh-TW;q=0.6",
+              "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+              "x-requested-with": "XMLHttpRequest"
+            },
+            "referrerPolicy": "no-referrer-when-downgrade",
+            "body": "path="+window.filePath+"&charset=utf-8&filestr="+btoa(unescape(encodeURIComponent(JSON.stringify(window.minder.exportJson()))))+"&base64=1",
+            "method": "POST",
+            "mode": "cors"
+          })
+          .then(function(response) {
+            if (!response.ok) {
+              throw new Error("HTTP error, status = " + response.status);
+            }
+            return response.json();
+          })
+          .then(function(json) {
+            if (!json.code === "true") {
+              throw new Error("Operation error, error = " + json.data);
+            } else {
+              alert(json.data);
+            }
+          })
+          .catch(function(error) {
+            var p = document.createElement('p');
+            p.appendChild(
+              document.createTextNode('Error: ' + error.message)
+            );
+            document.body.insertBefore(p, myList);
+          });
+        }
+			}
+		}
+	});
+
+angular.module('kityminderEditor')
     .directive('searchBox', function() {
         return {
             restrict: 'A',
@@ -4610,22 +4665,6 @@ angular.module('kityminderEditor')
                        executedCurTab = false;
                    });
                };
-
-               scope.saveMindMap = function() {
-                 fetch(window.appHost+"editor/fileSave", {
-                   "credentials": "include",
-                   "headers": {
-                     "accept": "application/json, text/javascript, */*; q=0.01",
-                     "accept-language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,zh-TW;q=0.6",
-                     "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                     "x-requested-with": "XMLHttpRequest"
-                   },
-                   "referrerPolicy": "no-referrer-when-downgrade",
-                   "body": "path="+window.filePath+"&charset=utf-8&filestr="+btoa(unescape(encodeURIComponent(JSON.stringify(window.minder.exportJson()))))+"&base64=1",
-                   "method": "POST",
-                   "mode": "cors"
-                 });
-               }
 
                function closeTopTab() {
                    var $tabContent = $('.tab-content');
