@@ -6,9 +6,6 @@ kodReady.push(function(){
         sort:"{{config.fileSort}}",
         icon:'{{pluginHost}}static/images/icon.png',
         callback:function(path,ext){
-            // console.log(path);
-            // console.log(core.pathThis(path));
-            // console.log(core.path2url(path));
             var timestamp = new Date().getTime();
             var url = '{{pluginHost}}static/kityminder/dist/index.html?url='+core.path2url(path)+'&apphost='+G.appHost+'&path='+urlEncode(path)+"&timestamp="+timestamp;
             if('window' == "{{config.openWith}}"){
