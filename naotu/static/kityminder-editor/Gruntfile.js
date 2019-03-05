@@ -170,12 +170,12 @@ module.exports = function(grunt) {
 				}, {
 				    expand: true,
 				    cwd: 'node_modules',
-				    src: 'kityminder-core/*',
+                                    src: ["kityminder-core/**/*.*"],
 				    dest: 'dist'
                                 }, {
 				    expand: true,
 				    cwd: 'bower_components',
-				    src: '*/*',
+				    src: ["*.*", "**/*.*"],
 				    dest: 'dist'
                                 }]
 		    }
