@@ -18,7 +18,7 @@ angular.module('kityminderEditor')
               "x-requested-with": "XMLHttpRequest"
             },
             "referrerPolicy": "no-referrer-when-downgrade",
-            "body": "path="+window.filePath+"&charset=utf-8&filestr="+btoa(unescape(encodeURIComponent(JSON.stringify(window.minder.exportJson()))))+"&base64=1",
+            "body": "path="+window.filePath+"&charset=utf-8&filestr="+encodeURIComponent(JSON.stringify(window.minder.exportJson())),
             "method": "POST",
             "mode": "cors"
           })
