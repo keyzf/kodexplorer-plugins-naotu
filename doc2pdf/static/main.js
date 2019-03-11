@@ -14,7 +14,7 @@ kodReady.push(function(){
               },
               error:core.ajaxError,
               success:function(data){
-                Tips.close('Done!');
+                Tips.close('转换完成!');
               }
             });
         }
